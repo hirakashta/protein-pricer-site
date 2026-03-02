@@ -1,1 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein Pricer — Find the Best Value Protein</title>
+  <meta name="description" content="Scan any product barcode to instantly calculate price per gram of protein. Compare value across stores with crowd-sourced pricing data.">
+  <link rel="canonical" href="https://proteinpricer.com">
 
+  <!-- Open Graph -->
+  <meta property="og:title" content="Protein Pricer — Find the Best Value Protein">
+  <meta property="og:description" content="Scan barcodes. Compare protein value. Save money.">
+  <meta property="og:url" content="https://proteinpricer.com">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --white: #fafafa;
+      --off-white: #f0f0f0;
+      --gray-100: #e5e5e5;
+      --gray-300: #a3a3a3;
+      --gray-500: #737373;
+      --gray-700: #404040;
+      --gray-900: #171717;
+      --black: #0a0a0a;
+      --blue: #2563eb;
+      --blue-light: #3b82f6;
+      --green: #10b981;
+      --green-soft: #d1fae5;
+      --amber: #f59e0b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* --- NAV --- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .logo {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--gray-300);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    /* --- HERO --- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 1rem;
+      border-radius: 100px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.08);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      max-width: 720px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: 1.125rem;
+      color: var(--gray-300);
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(255,255,255,0.1);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* --- HOW IT WORKS --- */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 3.5rem;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .step {
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .step:hover {
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .step-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--green);
+      margin-bottom: 1.25rem;
+    }
+
+    .step h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .step p {
+      font-size: 0.9375rem;
+      color: var(--gray-300);
+      line-height: 1.6;
+    }
+
+    /* --- FEATURES --- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .feature {
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .feature h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature p {
+      font-size: 0.9375rem;
+      color: var(--gray-300);
+      line-height: 1.6;
+    }
+
+    /* --- VALUE DEMO --- */
+    .value-demo {
+      margin-top: 4rem;
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.04), rgba(37, 99, 235, 0.04));
+    }
+
+    .value-demo h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-demo > p {
+      color: var(--gray-300);
+      font-size: 0.9375rem;
+      margin-bottom: 2rem;
+    }
+
+    .value-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .value-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .value-bar-label {
+      width: 140px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .value-bar-track {
+      flex: 1;
+      height: 32px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .value-bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    .fill-excellent { background: var(--green); width: 30%; }
+    .fill-good { background: #60a5fa; width: 55%; }
+    .fill-fair { background: var(--amber); width: 75%; }
+    .fill-expensive { background: #ef4444; width: 95%; }
+
+    .value-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: 80px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tag-excellent { color: var(--green); }
+    .tag-good { color: #60a5fa; }
+    .tag-fair { color: var(--amber); }
+    .tag-expensive { color: #ef4444; }
+
+    /* --- COMMUNITY --- */
+    .community-callout {
+      text-align: center;
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .community-callout::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .community-callout h2 {
+      margin-bottom: 1rem;
+    }
+
+    .community-callout p {
+      color: var(--gray-300);
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 2rem;
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-left {
+      font-size: 0.8125rem;
+      color: var(--gray-500);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-size: 0.8125rem;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gray-300); }
+
+    /* --- ANIMATIONS --- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1.25rem; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .section { padding: 4rem 1.5rem; }
+      .steps { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .value-bar-label { width: 100px; font-size: 0.8125rem; }
+      .value-tag { width: 64px; font-size: 0.6875rem; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="logo">Protein<span>Pricer</span></a>
+    <div class="nav-links">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">Coming soon to iOS &amp; Android</div>
+    <h1>Know what your <em>protein</em> actually costs.</h1>
+    <p class="hero-sub">Scan any product barcode to instantly calculate price per gram of protein. Compare value across stores with crowd-sourced data from real shoppers.</p>
+    <div class="hero-cta">
+      <a href="#how" class="btn btn-primary">See How It Works</a>
+      <a href="#features" class="btn btn-secondary">Explore Features</a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <p class="section-label">How it works</p>
+    <h2>Three steps to smarter shopping.</h2>
+    <div class="steps">
+      <div class="step">
+        <p class="step-num">01</p>
+        <h3>Scan</h3>
+        <p>Point your camera at any barcode or QR code. Product nutrition data loads instantly from Open Food Facts.</p>
+      </div>
+      <div class="step">
+        <p class="step-num">02</p>
+        <h3>Price</h3>
+        <p>Enter the price you see on the shelf. The app calculates price per gram of protein, protein per dollar, and a value rating.</p>
+      </div>
+      <div class="step">
+        <p class="step-num">03</p>
+        <h3>Compare</h3>
+        <p>Save your scans, browse community data, and find the best protein value at any store near you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2>Built for people who read nutrition labels.</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">📷</div>
+        <h3>Barcode &amp; QR scanning</h3>
+        <p>Supports standard barcodes and QR codes from store apps and websites. Scans resolve in under a second.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Three calculation modes</h3>
+        <p>Enter quantity by servings, weight, or volume. Auto-detects the best mode for each product. Handles unit conversions automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <h3>Community pricing data</h3>
+        <p>Every scan you save contributes to a shared database. Browse what others are paying for the same products at different stores.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy-first</h3>
+        <p>Works fully offline. No account required. Your notes stay private. You control what you share.</p>
+      </div>
+    </div>
+
+    <!-- Value rating demo -->
+    <div class="value-demo">
+      <h3>Instant value ratings</h3>
+      <p>Every scan gets a clear rating so you can decide at a glance.</p>
+      <div class="value-bars">
+        <div class="value-bar">
+          <span class="value-bar-label">Greek Yogurt</span>
+          <div class="value-bar-track"><div class="value-bar-fill fill-excellent">$0.04/g</div></div>
+          <span class="value-tag tag-excellent">Excellent</span>
+        </div>
+        <div class="value-bar">
+          <span class="value-bar-label">Chicken Breast</span>
+          <div class="value-bar-track"><div class="value-bar-fill fill-good">$0.07/g</div></div>
+          <span class="value-tag tag-good">Good</span>
+        </div>
+        <div class="value-bar">
+          <span class="value-bar-label">Protein Bar</span>
+          <div class="value-bar-track"><div class="value-bar-fill fill-fair">$0.12/g</div></div>
+          <span class="value-tag tag-fair">Fair</span>
+        </div>
+        <div class="value-bar">
+          <span class="value-bar-label">Smoothie Bowl</span>
+          <div class="value-bar-track"><div class="value-bar-fill fill-expensive">$0.25/g</div></div>
+          <span class="value-tag tag-expensive">Expensive</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="community-callout">
+    <p class="section-label">Open &amp; community-driven</p>
+    <h2>Better data from real shoppers.</h2>
+    <p>Protein Pricer uses the Open Food Facts database — a free, open, collaborative food database. Pricing data is crowd-sourced from users like you. The more people scan, the more useful it gets for everyone.</p>
+    <a href="#how" class="btn btn-primary">Get Started</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">&copy; 2025 Hira Kashta, LLC. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:support@proteinpricer.com">Contact</a>
+    </div>
+  </footer>
+
+</body>
+</html>
