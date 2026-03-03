@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Confirmed — Protein Pricer</title>
+  <meta name="description" content="Your email has been confirmed. You can now sign in to Protein Pricer.">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --white: #fafafa;
+      --gray-300: #a3a3a3;
+      --gray-500: #737373;
+      --black: #0a0a0a;
+      --green: #10b981;
+      --green-soft: rgba(16, 185, 129, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .card {
+      max-width: 440px;
+      width: 100%;
+      padding: 3rem 2.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.75rem;
+      animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      animation: fadeUp 0.6s ease 0.15s both;
+    }
+
+    .message {
+      color: var(--gray-300);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease 0.25s both;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      text-decoration: none;
+      background: var(--green);
+      color: var(--black);
+      transition: transform 0.15s, opacity 0.15s;
+      animation: fadeUp 0.6s ease 0.35s both;
+    }
+
+    .cta:hover { opacity: 0.9; }
+    .cta:active { transform: scale(0.97); }
+
+    .subtext {
+      margin-top: 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--gray-500);
+      animation: fadeUp 0.6s ease 0.45s both;
+    }
+
+    .logo {
+      position: fixed;
+      top: 1.25rem;
+      left: 2rem;
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--green); }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="logo">Protein<span>Pricer</span></a>
+
+  <div class="card">
+    <div class="icon">✓</div>
+    <h1>Email confirmed!</h1>
+    <p class="message">Your account is all set. You can close this page and open the Protein Pricer app to sign in.</p>
+    <a href="/" class="cta">Back to proteinpricer.com</a>
+    <p class="subtext">If the app doesn't open automatically, just open it from your home screen and sign in.</p>
+  </div>
+
+</body>
+</html>
