@@ -212,16 +212,29 @@
     // Check for valid recovery session on page load
     (async function init() {
       var hash = window.location.hash;
-      if (!hash || !hash.includes('type=recovery')) {
-        showError();
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+
+      // PKCE flow: exchange code for session
+      if (code) {
+        var result = await client.auth.exchangeCodeForSession(code);
+        if (result.error) {
+          showError();
+        }
         return;
       }
 
-      // Let Supabase client pick up the session from the URL
-      var result = await client.auth.getSession();
-      if (result.error || !result.data.session) {
-        showError();
+      // Implicit flow: token in hash fragment
+      if (hash && hash.includes('type=recovery')) {
+        var result = await client.auth.getSession();
+        if (result.error || !result.data.session) {
+          showError();
+        }
+        return;
       }
+
+      // No token or code found
+      showError();
     })();
 
     async function handleReset() {
