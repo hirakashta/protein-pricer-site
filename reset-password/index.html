@@ -211,29 +211,21 @@
 
     // Check for valid recovery session on page load
     (async function init() {
-      var hash = window.location.hash;
       var params = new URLSearchParams(window.location.search);
-      var code = params.get('code');
+      var tokenHash = params.get('token_hash');
+      var type = params.get('type');
 
-      // PKCE flow: exchange code for session
-      if (code) {
-        var result = await client.auth.exchangeCodeForSession(code);
+      if (tokenHash && type === 'recovery') {
+        var result = await client.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' });
         if (result.error) {
           showError();
+          return;
         }
+        // Session is now set, user can update password
         return;
       }
 
-      // Implicit flow: token in hash fragment
-      if (hash && hash.includes('type=recovery')) {
-        var result = await client.auth.getSession();
-        if (result.error || !result.data.session) {
-          showError();
-        }
-        return;
-      }
-
-      // No token or code found
+      // No valid token found
       showError();
     })();
 
